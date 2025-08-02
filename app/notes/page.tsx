@@ -6,16 +6,18 @@ import {
 import { fetchNotes } from "@/lib/api";
 import NotesClient from "./Notes.client";
 
-async function App() {
+async function App({ searchParams }: { searchParams?: { q?: string; page?: string } }) {
   const queryClient = new QueryClient();
+    const searchQuery = searchParams?.q ?? "";
+  const currentPage = Number(searchParams?.page) || 1;
 
-  await queryClient.prefetchQuery({
-    queryKey: ["request", "", 1],
+  const initialData = await queryClient.fetchQuery({
+    queryKey: ["notes", searchQuery, currentPage],
     queryFn: () => fetchNotes("", 1),
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotesClient />
+      <NotesClient initialData={initialData} initialSearch={searchQuery} initialPage={currentPage}/>
     </HydrationBoundary>
   );
 }

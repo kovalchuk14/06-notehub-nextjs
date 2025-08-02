@@ -11,9 +11,15 @@ import Pagination from "@/components/Pagination/Pagination";
 import SearchBox from "@/components/SearchBox/SearchBox";
 
 
-export default function NotesClient() {
-    const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+interface NotesClientProps {
+  initialData: Awaited<ReturnType<typeof fetchNotes>>;
+  initialSearch: string;
+  initialPage: number;
+}
+
+export default function NotesClient({ initialData, initialSearch ,initialPage }: NotesClientProps) {
+    const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleChange = useDebouncedCallback(
     (value: string) => {
@@ -24,9 +30,10 @@ export default function NotesClient() {
   );
 
   const { data } = useQuery({
-    queryKey: ["request",searchQuery, currentPage],
+    queryKey: ["notes",searchQuery, currentPage],
     queryFn: () => fetchNotes(searchQuery, currentPage),
     placeholderData: keepPreviousData,
+    initialData
   });
 
 
@@ -45,7 +52,7 @@ export default function NotesClient() {
       </header>
       {(data && data?.notes.length > 0) ? (<NoteList notes={data.notes}/>) : (<p>No notes, try again later</p>)}
       {isModalOpen && <Modal onClose={modalClose}>
-        <NoteForm onClose={modalClose} queryKey={["request",searchQuery, currentPage]}/>
+        <NoteForm onClose={modalClose} queryKey={["notes",searchQuery, currentPage]}/>
       </Modal>
       }
     </div>
