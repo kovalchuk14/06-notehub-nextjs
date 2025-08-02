@@ -11,13 +11,13 @@ async function App({ searchParams }: { searchParams?: { q?: string; page?: strin
     const searchQuery = searchParams?.q ?? "";
   const currentPage = Number(searchParams?.page) || 1;
 
-  const initialData = await queryClient.fetchQuery({
+  await queryClient.prefetchQuery({
     queryKey: ["notes", searchQuery, currentPage],
     queryFn: () => fetchNotes(searchQuery, currentPage),
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotesClient initialData={initialData} initialSearch={searchQuery} initialPage={currentPage}/>
+      <NotesClient initialSearch={searchQuery} initialPage={currentPage}/>
     </HydrationBoundary>
   );
 }

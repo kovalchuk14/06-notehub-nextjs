@@ -12,12 +12,11 @@ import SearchBox from "@/components/SearchBox/SearchBox";
 
 
 interface NotesClientProps {
-  initialData: Awaited<ReturnType<typeof fetchNotes>>;
   initialSearch: string;
   initialPage: number;
 }
 
-export default function NotesClient({ initialData, initialSearch ,initialPage }: NotesClientProps) {
+export default function NotesClient({ initialSearch ,initialPage }: NotesClientProps) {
     const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +32,6 @@ export default function NotesClient({ initialData, initialSearch ,initialPage }:
     queryKey: ["notes",searchQuery, currentPage],
     queryFn: () => fetchNotes(searchQuery, currentPage),
     placeholderData: keepPreviousData,
-    initialData
   });
 
 
