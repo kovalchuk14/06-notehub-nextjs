@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Note, NoteInputValues } from "../types/note";
 
-interface FetchHttpResponse {
+export interface FetchHttpResponse {
     notes: Note[],
     totalPages:number,
 }
