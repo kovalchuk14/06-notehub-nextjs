@@ -50,7 +50,7 @@ export default function NotesClient({ initialSearch ,initialPage,initData }: Not
           <Pagination totalPages={ data.totalPages} setCurrentPage={setCurrentPage} currentPage={currentPage} />}
         {<button className={css.button} onClick={()=>setIsModalOpen(true)}>Create note +</button>}
       </header>
-      {(data && data?.notes.length > 0) ? (<NoteList notes={data.notes}/>) : (<p>No notes, try again later</p>)}
+      {(data && data?.notes.length > 0) ? (<NoteList notes={data.notes} queryKey={["notes",searchQuery, currentPage]}/>) : (<p>No notes, try again later</p>)}
       {isModalOpen && <Modal onClose={modalClose}>
         <NoteForm onClose={modalClose} queryKey={["notes",searchQuery, currentPage]}/>
       </Modal>
